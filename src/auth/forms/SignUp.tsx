@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+
 import {
   Form,
   FormControl,
@@ -6,29 +8,59 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { SignupValidation } from "@/validation/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import * as z from "zod";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { SignupValidation } from '@/validation/validation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+
+import {
+  useCreateUserAccount,
+  useSignInAccount,
+} from '@/lib/react-query/queriesAndMutations';
+import * as z from 'zod';
 
 const SignUp = () => {
-  const isLoading = false;
+  const { toast } = useToast();
+  const { mutateAsync: createUser, isPending: isCreating } =
+    useCreateUserAccount();
+  const { mutateAsync: signInUser, isPending: isSigningIn } =
+    useSignInAccount();
+
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
     defaultValues: {
-      name: "",
-      username: "",
-      email: "",
-      password: "",
+      name: '',
+      username: '',
+      email: '',
+      password: '',
     },
   });
 
+  async function onSubmit(values: z.infer<typeof SignupValidation>) {
+    const user = await createUser(values);
+    if (!user) {
+      toast({
+        variant: 'destructive',
+        title: 'Uh oh! Something went wrong.',
+        description: 'There was a problem with your request.',
+      });
+      return;
+    }
+
+    const session = await signInUser({
+      email: values.email,
+      password: values.password,
+    });
+    if (!session) {
+      return toast({ title: 'Uh oh! Something went wrong.' });
+    }
+  }
+
   return (
     <Form {...form}>
-      <div className="sm:w-420 flex-center flex-col mx-auto">
+      <div className="sm:w-420 flex-shrink-0 p-4 flex-center flex-col mx-auto">
         <img
           className="w-40 h-24"
           src="/android-chrome-192x192.png"
@@ -39,7 +71,10 @@ const SignUp = () => {
           Create a new account
         </h2>
 
-        <form className="flex flex-col gap-5 w-full mt-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-5 w-full mt-4"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -97,10 +132,10 @@ const SignUp = () => {
           />
 
           <Button type="submit" className="shad-button_primary">
-            {isLoading ? (
+            {isPending ? (
               <div className="flex-center gap-2">Loading...</div>
             ) : (
-              "Sign Up"
+              'Sign Up'
             )}
           </Button>
 

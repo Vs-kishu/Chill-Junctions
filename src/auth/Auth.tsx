@@ -1,18 +1,18 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from 'react-router-dom';
 const Auth = () => {
   const isAuthenticated = false;
 
   return (
     <>
       {isAuthenticated ? (
-        <Navigate to={"/"} />
+        <Navigate to={'/'} />
       ) : (
         <>
-          <section className="flex justify-between items-center ">
+          <section className="flex lg:flex-row flex-col-reverse justify-between items-center ">
             <Outlet />
-            <div>
+            <div className="max-lg:w-full">
               <img
-                className="min-h-screen"
+                className="max-lg:w-full  lg:min-h-screen"
                 src="https://res.cloudinary.com/dngrtoqfe/image/upload/v1698836471/svg/ihbejk8tqewkqrxld3iw.gif"
                 alt="auth"
               />

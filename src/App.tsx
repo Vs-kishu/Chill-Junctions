@@ -1,8 +1,10 @@
+import { Toaster } from "@/components/ui/toaster";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Auth from "./auth/Auth";
 import SignIn from "./auth/forms/SignIn";
 import SignUp from "./auth/forms/SignUp";
 import { Home } from "./pages";
+
 const App = () => {
   return (
     <main>
@@ -18,6 +20,7 @@ const App = () => {
             <Route index element={<Home />} />
           </Route>
         </Routes>
+        <Toaster />
       </BrowserRouter>
     </main>
   );
