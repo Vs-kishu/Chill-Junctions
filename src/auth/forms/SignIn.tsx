@@ -1,4 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+
 import {
   Form,
   FormControl,
@@ -6,23 +8,50 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { SigninValidation } from "@/validation/validation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-import * as z from "zod";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { SigninValidation } from '@/validation/validation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useUserContext } from '@/context/AuthContext';
+import { useSignInAccount } from '@/lib/react-query/queriesAndMutations';
+import * as z from 'zod';
 
 const SignIn = () => {
-  const isLoading = false;
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { checkAuthUser, isLoading } = useUserContext();
+
+  const { mutateAsync: signInUser, isPending: isSigningIn } =
+    useSignInAccount();
+
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
+
+  async function onSubmit(values: z.infer<typeof SigninValidation>) {
+    const session = await signInUser({
+      email: values.email,
+      password: values.password,
+    });
+    if (!session) {
+      return toast({ title: 'Uh oh! Something went wrong.' });
+    }
+
+    const isLoggedIn = await checkAuthUser();
+    if (isLoggedIn) {
+      form.reset();
+      navigate('/');
+    } else {
+      toast({ title: 'signup failed Please try again' });
+    }
+  }
 
   return (
     <Form {...form}>
@@ -39,7 +68,10 @@ const SignIn = () => {
         <p className="text-sage-1 small-medium md:base-regular mt-2">
           Welcome back! Please enter your details.
         </p>
-        <form className="flex flex-col gap-5 w-full mt-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-5 w-full mt-4"
+        >
           <FormField
             control={form.control}
             name="email"
@@ -69,10 +101,10 @@ const SignIn = () => {
           />
 
           <Button type="submit" className="shad-button_primary">
-            {isLoading ? (
+            {isLoading || isSigningIn ? (
               <div className="flex-center gap-2">Loading...</div>
             ) : (
-              "Log in"
+              'Log in'
             )}
           </Button>
 

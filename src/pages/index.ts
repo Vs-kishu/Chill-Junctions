@@ -1,5 +1,4 @@
-import Home from "./Home";
+import BaseLayout from './BaseLayout';
+import Home from './components/Home';
 
-export {
-    Home
-};
+export { BaseLayout, Home };

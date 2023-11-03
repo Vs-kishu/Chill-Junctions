@@ -13,8 +13,9 @@ import { Input } from '@/components/ui/input';
 import { SignupValidation } from '@/validation/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
+import { useUserContext } from '@/context/AuthContext';
 import {
   useCreateUserAccount,
   useSignInAccount,
@@ -23,6 +24,8 @@ import * as z from 'zod';
 
 const SignUp = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { checkAuthUser, isLoading } = useUserContext();
   const { mutateAsync: createUser, isPending: isCreating } =
     useCreateUserAccount();
   const { mutateAsync: signInUser, isPending: isSigningIn } =
@@ -55,6 +58,14 @@ const SignUp = () => {
     });
     if (!session) {
       return toast({ title: 'Uh oh! Something went wrong.' });
+    }
+
+    const isLoggedIn = await checkAuthUser();
+    if (isLoggedIn) {
+      form.reset();
+      navigate('/');
+    } else {
+      toast({ title: 'signup failed Please try again' });
     }
   }
 
@@ -132,7 +143,7 @@ const SignUp = () => {
           />
 
           <Button type="submit" className="shad-button_primary">
-            {isPending ? (
+            {isCreating || isSigningIn || isLoading ? (
               <div className="flex-center gap-2">Loading...</div>
             ) : (
               'Sign Up'
