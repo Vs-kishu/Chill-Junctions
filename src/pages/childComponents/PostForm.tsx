@@ -43,7 +43,12 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
   const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
     const newPost = await createPost({ ...value, userId: user.id });
-    console.log(newPost);
+    if (!newPost) {
+      toast({
+        title: `${action} post failed. Please try again.`,
+      });
+    }
+    navigate('/');
   };
 
   return (
