@@ -254,7 +254,7 @@
     @apply border-2 border-red !important;
   }
   .shad-form_label {
-    @apply text-sage-1 !important;
+    @apply text-black !important;
   }
 
   .shad-form_message {
@@ -262,11 +262,11 @@
   }
 
   .shad-input {
-    @apply h-12 bg-dark-4 border-none placeholder:text-light-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
+    @apply h-12 bg-dark-4 border-none placeholder:text-sage-4 focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
   }
 
   .shad-textarea {
-    @apply h-36 bg-sage-3 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
+    @apply h-36 bg-light-1 rounded-xl border-none focus-visible:ring-1 focus-visible:ring-offset-1 ring-offset-light-3 !important;
   }
 
   /* Button */
@@ -275,7 +275,7 @@
   }
 
   .shad-button_dark_4 {
-    @apply h-12 bg-dark-4 px-5 text-light-1 flex gap-2 !important;
+    @apply h-12 bg-sage-1 px-5 text-light-1 flex gap-2 !important;
   }
 
   .shad-button_ghost {
