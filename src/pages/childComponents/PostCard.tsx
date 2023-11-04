@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { useUserContext } from '@/context/AuthContext';
 import { multiFormatDateString } from '@/lib/utils';
+import PostFeature from './PostFeature';
 
 type PostCardProps = {
   post: Models.Document;
@@ -11,7 +12,6 @@ type PostCardProps = {
 
 const PostCard = ({ post }: PostCardProps) => {
   const { user } = useUserContext();
-
   if (!post.user) return;
 
   return (
@@ -64,6 +64,7 @@ const PostCard = ({ post }: PostCardProps) => {
 
         <img src={post.imageUrl} alt="post image" className="post-card_img" />
       </Link>
+      <PostFeature post={post} userId={user.id} />
     </div>
   );
 };
