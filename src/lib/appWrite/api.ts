@@ -64,7 +64,6 @@ export async function userSignIn(user: { email: string; password: string }) {
 }
 
 export async function getCurrentUser() {
-  console.log('getcurrentuser');
   try {
     const currentAccount = await account.get();
     if (!currentAccount) throw Error;
@@ -169,7 +168,6 @@ export async function deleteFile(fileId: string) {
 }
 
 export async function getRecentPosts() {
-  console.log('getrecebtposts');
   try {
     const posts = await databases.listDocuments(
       appwriteConfig.databaseId,
@@ -199,9 +197,43 @@ export async function likePost(postId: string, likesArr: string[]) {
   }
 }
 
+export async function savePost(postId: string, userId: string) {
+  try {
+    const savePost = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      ID.unique(),
+      {
+        user: userId,
+        post: postId,
+      }
+    );
+
+    return savePost;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deletePost(postId: string) {
+  console.log(postId);
+  try {
+    await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      postId
+    );
+
+    return { status: 'ok' };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function getPostById(postId?: string) {
+  console.log('here');
   if (!postId) throw Error;
-  console.log('getpostbyid');
+
   try {
     const post = await databases.getDocument(
       appwriteConfig.databaseId,

@@ -1,4 +1,9 @@
-import { useLikePost } from '@/lib/react-query/queriesAndMutations';
+import {
+  useDeletePost,
+  useGetCurrentUser,
+  useLikePost,
+  useSavePost,
+} from '@/lib/react-query/queriesAndMutations';
 import { Models } from 'appwrite';
 import { FcBookmark, FcLike, FcLikePlaceholder } from 'react-icons/fc';
 import { FiBookmark } from 'react-icons/fi';
@@ -10,21 +15,35 @@ type PostFeaturesProps = {
 };
 
 const PostFeature = ({ post, userId }: PostFeaturesProps) => {
-  const { mutateAsync: LikePost, isPending: isliking } = useLikePost();
+  const { mutate: LikePost, isPending: isliking } = useLikePost();
+  const { data: userData, isPending: isUserDataLoading } = useGetCurrentUser();
+  const { mutateAsync: savePost, isPending: isSaving } = useSavePost();
+
+  const { mutateAsync: deletePost, isPending: isDeleting } = useDeletePost();
 
   const hashLiked = post.likes.find(
     (user: Models.Document) => user.$id === userId
   );
 
+  const hasSaved = userData?.save.find(
+    (savepost: Models.Document) => savepost.post.$id === post.$id
+  );
   const handlePostLike = async (postId: string) => {
     if (hashLiked) {
       const updatedLikes = post.likes.filter(
         (user: Models.Document) => user.$id !== userId
       );
-      await LikePost({ postId, likesArr: updatedLikes });
+      LikePost({ postId, likesArr: updatedLikes });
     } else {
       const updatedLikes = [...post.likes, userId];
-      await LikePost({ postId, likesArr: updatedLikes });
+      LikePost({ postId, likesArr: updatedLikes });
+    }
+  };
+  const handleSaveAndUnsavedPost = async (postId: string) => {
+    if (hasSaved) {
+      await deletePost({ postId: hasSaved.$id });
+    } else {
+      await savePost({ postId, userId });
     }
   };
 
@@ -45,8 +64,17 @@ const PostFeature = ({ post, userId }: PostFeaturesProps) => {
         )}
       </div>
       <div className="flex items-center cursor-pointer">
-        <FcBookmark />
-        <FiBookmark />
+        {isSaving || isDeleting || isUserDataLoading ? (
+          <Loader w={10} h={10} />
+        ) : (
+          <>
+            {hasSaved ? (
+              <FcBookmark onClick={handleSaveAndUnsavedPost} />
+            ) : (
+              <FiBookmark onClick={() => handleSaveAndUnsavedPost(post.$id)} />
+            )}
+          </>
+        )}
       </div>
     </div>
   );
