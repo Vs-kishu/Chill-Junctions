@@ -1,8 +1,9 @@
-import { INewUser } from '@/types';
+import { INewUser, IUpdatePost } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createPost,
   deletePost,
+  editPost,
   getCurrentUser,
   getPostById,
   getRecentPosts,
@@ -104,6 +105,21 @@ export const useDeletePost = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+    },
+  });
+};
+
+export const useEditPost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (post: IUpdatePost) => editPost(post),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
       });
     },
   });

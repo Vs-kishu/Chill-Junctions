@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Models } from 'appwrite';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import * as z from 'zod';
@@ -17,9 +18,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { useUserContext } from '@/context/AuthContext';
-import { useCreatePost } from '@/lib/react-query/queriesAndMutations';
+import {
+  useCreatePost,
+  useEditPost,
+} from '@/lib/react-query/queriesAndMutations';
 import { PostValidation } from '@/validation/validation';
 import FileUploader from './FileUploader';
+import Loader from './Loader';
 
 type PostFormProps = {
   post?: Models.Document;
@@ -31,6 +36,9 @@ const PostForm = ({ post, action }: PostFormProps) => {
   const { toast } = useToast();
   const { user } = useUserContext();
   const { mutateAsync: createPost, isPending: isCreating } = useCreatePost();
+  const { mutateAsync: updatePost, isPending: isUpdating } = useEditPost();
+
+  const [fileChanged, setFileChanged] = useState(false);
 
   const form = useForm<z.infer<typeof PostValidation>>({
     resolver: zodResolver(PostValidation),
@@ -42,7 +50,27 @@ const PostForm = ({ post, action }: PostFormProps) => {
     },
   });
 
+  useEffect(() => {
+    if (form.formState.isDirty) {
+      setFileChanged(true);
+    } else {
+      setFileChanged(false);
+    }
+  }, [form.formState.isDirty]);
+
   const handleSubmit = async (value: z.infer<typeof PostValidation>) => {
+    if (post && action === 'Update') {
+      const updatedPost = await updatePost({
+        ...value,
+        postId: post.$id,
+        imageId: post.imageId,
+        imageUrl: post.imageUrl,
+      });
+      if (!updatedPost) {
+        return toast({ title: 'please try again' });
+      }
+      return navigate(`/posts/${post.$id}`);
+    }
     const newPost = await createPost({ ...value, userId: user.id });
     if (!newPost) {
       toast({
@@ -137,9 +165,11 @@ const PostForm = ({ post, action }: PostFormProps) => {
           </Button>
           <Button
             type="submit"
-            className="shad-button_primary whitespace-nowrap"
+            className=" flex items-center shad-button_primary whitespace-nowrap"
+            disabled={isCreating || isUpdating || !fileChanged}
           >
-            {isCreating ? 'Loading...' : `${action} Post`}
+            {isCreating || (isUpdating && <Loader w={10} h={10} />)}
+            {`${action} Post`}
           </Button>
         </div>
       </form>
