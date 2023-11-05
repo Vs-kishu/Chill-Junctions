@@ -168,7 +168,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
             className=" flex items-center shad-button_primary whitespace-nowrap"
             disabled={isCreating || isUpdating || !fileChanged}
           >
-            {isCreating || (isUpdating && <Loader w={10} h={10} />)}
+            {(isCreating || isUpdating) && <Loader w={10} h={10} />}
             {`${action} Post`}
           </Button>
         </div>
