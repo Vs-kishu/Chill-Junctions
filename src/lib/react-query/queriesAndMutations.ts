@@ -1,6 +1,7 @@
 import { INewUser, IUpdatePost } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+  UnSavePost,
   createPost,
   deletePost,
   editPost,
@@ -101,10 +102,11 @@ export const useSavePost = () => {
   });
 };
 
-export const useDeletePost = () => {
+export const useUnSavePost = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ postId }: { postId: string }) => deletePost(postId),
+    mutationFn: ({ savePostId }: { savePostId: string }) =>
+      UnSavePost(savePostId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_CURRENT_USER],
@@ -123,6 +125,27 @@ export const useEditPost = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_POST_BY_ID, data?.$id],
+      });
+    },
+  });
+};
+
+export const useDeletePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      postId,
+      imageId,
+      savePostId,
+    }: {
+      postId?: string;
+      imageId?: string;
+      savePostId: string;
+    }) => deletePost(postId, imageId, savePostId),
+    onSuccess: (data) => {
+      console.log(data);
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
       });
     },
   });

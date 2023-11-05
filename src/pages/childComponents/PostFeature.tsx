@@ -1,8 +1,8 @@
 import {
-  useDeletePost,
   useGetCurrentUser,
   useLikePost,
   useSavePost,
+  useUnSavePost,
 } from '@/lib/react-query/queriesAndMutations';
 import { Models } from 'appwrite';
 import { FcBookmark, FcLike, FcLikePlaceholder } from 'react-icons/fc';
@@ -19,7 +19,7 @@ const PostFeature = ({ post, userId }: PostFeaturesProps) => {
   const { data: userData, isPending: isUserDataLoading } = useGetCurrentUser();
   const { mutateAsync: savePost, isPending: isSaving } = useSavePost();
 
-  const { mutateAsync: deletePost, isPending: isDeleting } = useDeletePost();
+  const { mutateAsync: unSavePost, isPending: isDeleting } = useUnSavePost();
 
   const hashLiked = post.likes.find(
     (user: Models.Document) => user.$id === userId
@@ -41,7 +41,7 @@ const PostFeature = ({ post, userId }: PostFeaturesProps) => {
   };
   const handleSaveAndUnsavedPost = async (postId: string) => {
     if (hasSaved) {
-      await deletePost({ postId: hasSaved.$id });
+      await unSavePost({ savePostId: hasSaved.$id });
     } else {
       await savePost({ postId, userId });
     }

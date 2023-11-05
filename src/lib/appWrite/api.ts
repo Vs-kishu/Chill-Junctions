@@ -215,13 +215,12 @@ export async function savePost(postId: string, userId: string) {
   }
 }
 
-export async function deletePost(postId: string) {
-  console.log(postId);
+export async function UnSavePost(savePostId: string) {
   try {
     await databases.deleteDocument(
       appwriteConfig.databaseId,
       appwriteConfig.savesCollectionId,
-      postId
+      savePostId
     );
 
     return { status: 'ok' };
@@ -318,6 +317,33 @@ export async function editPost(post: IUpdatePost) {
     }
 
     return updatedPost;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function deletePost(
+  postId?: string,
+  imageId?: string,
+  savePostId?: string
+) {
+  if (!postId || !imageId) return;
+
+  if (savePostId) {
+    await UnSavePost(savePostId);
+  }
+
+  try {
+    const statusCode = await databases.deleteDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      postId
+    );
+    console.log(statusCode);
+    if (!statusCode) throw Error;
+    await deleteFile(imageId);
+
+    return { status: 'Ok' };
   } catch (error) {
     console.log(error);
   }

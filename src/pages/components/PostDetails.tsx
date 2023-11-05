@@ -1,7 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/AuthContext';
-import { useGetPostById } from '@/lib/react-query/queriesAndMutations';
+import {
+  useDeletePost,
+  useGetCurrentUser,
+  useGetPostById,
+} from '@/lib/react-query/queriesAndMutations';
 import { multiFormatDateString } from '@/lib/utils';
+import { Models } from 'appwrite';
 import { FcEditImage } from 'react-icons/fc';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { MdDelete } from 'react-icons/md';
@@ -13,10 +18,25 @@ const PostDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { user } = useUserContext();
-  const { data: post, isLoading } = useGetPostById(id);
-  console.log(post);
+  const { data: userData } = useGetCurrentUser();
 
-  if (!post) return;
+  const { data: post, isLoading } = useGetPostById(id);
+  const { mutateAsync: deletePost } = useDeletePost();
+
+  const savedPost = userData?.save.find(
+    (savepost: Models.Document) => savepost.post.$id === post?.$id
+  );
+
+  if (!post || !userData) return <Loader w={50} h={50} />;
+
+  const handleDeletePost = async () => {
+    await deletePost({
+      postId: id,
+      imageId: post?.imageId,
+      savePostId: savedPost?.$id,
+    });
+    navigate(-1);
+  };
 
   return (
     <div className="post_details-container">
@@ -82,7 +102,10 @@ const PostDetails = () => {
                     user.id !== post?.user.$id && 'hidden'
                   }`}
                 >
-                  <MdDelete className="text-2xl hover:scale-110 hover:text-light-1" />
+                  <MdDelete
+                    onClick={handleDeletePost}
+                    className="text-2xl hover:scale-110 hover:text-light-1"
+                  />
                 </Button>
               </div>
             </div>
