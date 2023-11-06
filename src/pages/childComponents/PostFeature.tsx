@@ -12,9 +12,10 @@ import Loader from './Loader';
 type PostFeaturesProps = {
   post: Models.Document;
   userId: string;
+  notShowLike?: boolean;
 };
 
-const PostFeature = ({ post, userId }: PostFeaturesProps) => {
+const PostFeature = ({ post, userId, notShowLike }: PostFeaturesProps) => {
   const { mutate: LikePost, isPending: isliking } = useLikePost();
   const { data: userData, isPending: isUserDataLoading } = useGetCurrentUser();
   const { mutateAsync: savePost, isPending: isSaving } = useSavePost();
@@ -48,7 +49,7 @@ const PostFeature = ({ post, userId }: PostFeaturesProps) => {
   };
 
   return (
-    <div className="text-white bg-sage-4 rounded-md py-2 px-5 flex-between text-3xl">
+    <div className="text-white  rounded-md py-2 px-5 flex-between text-3xl">
       <div className="flex items-center gap-2 cursor-pointer">
         {isliking ? (
           <Loader w={10} h={10} />
@@ -59,7 +60,9 @@ const PostFeature = ({ post, userId }: PostFeaturesProps) => {
             ) : (
               <FcLikePlaceholder onClick={() => handlePostLike(post.$id)} />
             )}
-            <span className="text-sm font-bold">{post.likes.length}</span>
+            {notShowLike && (
+              <span className="text-sm font-bold">{post.likes.length}</span>
+            )}
           </>
         )}
       </div>
