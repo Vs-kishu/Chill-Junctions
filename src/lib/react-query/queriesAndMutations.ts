@@ -103,7 +103,7 @@ export const useLikePost = () => {
         queryKey: [QUERY_KEYS.GET_POST_BY_ID],
       });
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
+        queryKey: [QUERY_KEYS.GET_INFINITE_POST],
       });
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.SEARCH_POSTS],
@@ -176,18 +176,20 @@ export const useDeletePost = () => {
 
 export const useGetPosts = () => {
   return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
-    queryFn: getInfinitePost,
-    getNextPageParam: (lastPage) => {
+    queryKey: [QUERY_KEYS.GET_INFINITE_POST],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    queryFn: getInfinitePost as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    getNextPageParam: (lastPage: any) => {
       // If there's no data, there are no more pages.
       if (lastPage && lastPage.documents.length === 0) {
         return null;
       }
-
       // Use the $id of the last document as the cursor.
       const lastId = lastPage?.documents[lastPage.documents.length - 1].$id;
       return lastId;
     },
+    initialPageParam: undefined,
   });
 };
 

@@ -367,8 +367,9 @@ export async function deletePost(
   }
 }
 
-export async function getInfinitePost({ pageParam }: { pageParam: number }) {
-  const queries = [Query.orderDesc('$updatedAt'), Query.limit(5)];
+export async function getInfinitePost({ pageParam }: { pageParam?: number }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const queries: any[] = [Query.orderDesc('$updatedAt'), Query.limit(5)];
 
   if (pageParam) {
     queries.push(Query.cursorAfter(pageParam.toString()));
