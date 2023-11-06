@@ -13,8 +13,11 @@ const GridPosts = ({
   showUser = true,
   showPostFeature = true,
 }: PostTypesProps) => {
+  console.log(explorePosts);
+
   const { user } = useUserContext();
   if (!explorePosts) return <Loader w={50} h={50} />;
+
   return (
     <ul className="grid-container">
       {explorePosts.map((post) => (

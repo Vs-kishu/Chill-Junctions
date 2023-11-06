@@ -80,6 +80,24 @@ export async function getCurrentUser() {
   }
 }
 
+export async function getUserById(userId?: string) {
+  if (!userId) throw Error;
+
+  try {
+    const post = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      userId
+    );
+
+    if (!post) throw Error;
+
+    return post;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export async function signOut() {
   try {
     const session = await account.deleteSession('current');
