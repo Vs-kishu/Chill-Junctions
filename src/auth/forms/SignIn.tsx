@@ -17,12 +17,14 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '@/context/AuthContext';
 import { useSignInAccount } from '@/lib/react-query/queriesAndMutations';
+import { useState } from 'react';
 import * as z from 'zod';
 
 const SignIn = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { checkAuthUser, isLoading } = useUserContext();
+  const [isGuestLogin, setIsGuestLogin] = useState(false);
+  const { checkAuthUser } = useUserContext();
 
   const { mutateAsync: signInUser, isPending: isSigningIn } =
     useSignInAccount();
@@ -39,6 +41,24 @@ const SignIn = () => {
     const session = await signInUser({
       email: values.email,
       password: values.password,
+    });
+    if (!session) {
+      return toast({ title: 'Uh oh! Something went wrong.' });
+    }
+
+    const isLoggedIn = await checkAuthUser();
+    if (isLoggedIn) {
+      form.reset();
+      navigate('/');
+    } else {
+      toast({ title: 'signup failed Please try again' });
+    }
+  }
+
+  async function handleGuestLogin() {
+    const session = await signInUser({
+      email: 'guest@gmail.com',
+      password: 'guest8896',
     });
     if (!session) {
       return toast({ title: 'Uh oh! Something went wrong.' });
@@ -99,14 +119,34 @@ const SignIn = () => {
               </FormItem>
             )}
           />
+          {isGuestLogin ? (
+            <Button
+              type="submit"
+              onClick={handleGuestLogin}
+              className="shad-button_primary"
+            >
+              {isSigningIn ? (
+                <div className="flex-center gap-2">Loading...</div>
+              ) : (
+                'Guest LogIn'
+              )}
+            </Button>
+          ) : (
+            <Button type="submit" className="shad-button_primary">
+              {isSigningIn ? (
+                <div className="flex-center gap-2">Loading...</div>
+              ) : (
+                'Log in'
+              )}
+            </Button>
+          )}
 
-          <Button type="submit" className="shad-button_primary">
-            {isLoading || isSigningIn ? (
-              <div className="flex-center gap-2">Loading...</div>
-            ) : (
-              'Log in'
-            )}
-          </Button>
+          <h1
+            className="cursor-pointer hover:text-light-1 font-bold"
+            onClick={() => setIsGuestLogin(true)}
+          >
+            Guest LogIn ?
+          </h1>
 
           <p className="text-small-regular text-sage-1 text-center mt-2">
             Don&apos;t have an account?
