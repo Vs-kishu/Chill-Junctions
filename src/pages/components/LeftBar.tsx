@@ -16,6 +16,7 @@ const LeftBar = () => {
     if (isSuccess) {
       navigate('/sign-in');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
   return (
     <nav className="leftsidebar h-screen">

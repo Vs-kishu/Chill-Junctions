@@ -120,11 +120,7 @@ const SignIn = () => {
             )}
           />
           {isGuestLogin ? (
-            <Button
-              type="submit"
-              onClick={handleGuestLogin}
-              className="shad-button_primary"
-            >
+            <Button onClick={handleGuestLogin} className="shad-button_primary">
               {isSigningIn ? (
                 <div className="flex-center gap-2">Loading...</div>
               ) : (

@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetUserById } from '@/lib/react-query/queriesAndMutations';
 import { BsImages } from 'react-icons/bs';
+import { FaBookmark } from 'react-icons/fa';
 import { FcLike } from 'react-icons/fc';
 import { FiEdit } from 'react-icons/fi';
 import {
@@ -12,6 +13,7 @@ import {
   useLocation,
   useParams,
 } from 'react-router-dom';
+import { Saved } from '..';
 import GridPosts from '../childComponents/GridPosts';
 import LikedPosts from '../childComponents/LikedPosts';
 import Loader from '../childComponents/Loader';
@@ -21,13 +23,10 @@ const Profile = () => {
   const { user } = useUserContext();
   const { pathname } = useLocation();
   const { data: userProfile, isLoading: isProfileLoading } = useGetUserById(id);
-  console.log(userProfile);
 
   if (isProfileLoading || !userProfile) {
     return <Loader w={70} h={70} />;
   }
-
-  console.log();
 
   return (
     <div className="profile-container">
@@ -96,13 +95,23 @@ const Profile = () => {
           </Link>
           <Link
             to={`/profile/${id}/liked-posts`}
-            className={`profile-tab rounded-r-lg ${
+            className={`profile-tab  ${
               pathname === `/profile/${id}/liked-posts` &&
               '!bg-sage-4 text-light-1'
             }`}
           >
             <FcLike />
             Liked Posts
+          </Link>
+          <Link
+            to={`/profile/${id}/saved-posts`}
+            className={`profile-tab rounded-r-lg ${
+              pathname === `/profile/${id}/saved-posts` &&
+              '!bg-sage-4 text-light-1'
+            }`}
+          >
+            <FaBookmark />
+            Saved Posts
           </Link>
         </div>
       )}
@@ -116,6 +125,9 @@ const Profile = () => {
         />
         {userProfile.$id === user.id && (
           <Route path="/liked-posts" element={<LikedPosts />} />
+        )}
+        {userProfile.$id === user.id && (
+          <Route path="/saved-posts" element={<Saved />} />
         )}
       </Routes>
       <Outlet />

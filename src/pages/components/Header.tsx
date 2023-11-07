@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useUserContext } from '@/context/AuthContext';
 import { useSignOutAccount } from '@/lib/react-query/queriesAndMutations';
 import { useEffect } from 'react';
