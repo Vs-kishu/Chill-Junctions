@@ -248,7 +248,6 @@ export async function UnSavePost(savePostId: string) {
 }
 
 export async function getPostById(postId?: string) {
-  console.log(postId);
   if (!postId) throw Error;
 
   try {

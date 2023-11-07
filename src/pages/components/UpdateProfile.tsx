@@ -179,7 +179,7 @@ const UpdateProfile = () => {
                 className="shad-button_primary whitespace-nowrap"
                 disabled={isLoadingUpdate}
               >
-                {isLoadingUpdate && <Loader w={50} h={50} />}
+                {isLoadingUpdate && <Loader w={10} h={10} />}
                 Update Profile
               </Button>
             </div>

@@ -17,6 +17,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import { useUserContext } from '@/context/AuthContext';
 import { useSignInAccount } from '@/lib/react-query/queriesAndMutations';
+import Loader from '@/pages/childComponents/Loader';
 import { useState } from 'react';
 import * as z from 'zod';
 
@@ -56,6 +57,9 @@ const SignIn = () => {
   }
 
   async function handleGuestLogin() {
+    form.setValue('email', 'guest@gmail.com');
+    form.setValue('password', 'guest8896');
+
     const session = await signInUser({
       email: 'guest@gmail.com',
       password: 'guest8896',
@@ -120,9 +124,15 @@ const SignIn = () => {
             )}
           />
           {isGuestLogin ? (
-            <Button onClick={handleGuestLogin} className="shad-button_primary">
+            <Button
+              type="button"
+              onClick={handleGuestLogin}
+              className="shad-button_primary"
+            >
               {isSigningIn ? (
-                <div className="flex-center gap-2">Loading...</div>
+                <div className="flex-center gap-2">
+                  <Loader w={20} h={20} />
+                </div>
               ) : (
                 'Guest LogIn'
               )}
@@ -130,7 +140,9 @@ const SignIn = () => {
           ) : (
             <Button type="submit" className="shad-button_primary">
               {isSigningIn ? (
-                <div className="flex-center gap-2">Loading...</div>
+                <div className="flex-center gap-2">
+                  <Loader w={20} h={20} />
+                </div>
               ) : (
                 'Log in'
               )}

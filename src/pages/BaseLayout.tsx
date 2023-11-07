@@ -8,7 +8,7 @@ const BaseLayout = () => {
     <div className="w-full md:flex">
       <Header />
       <LeftBar />
-      <section className="flex flex-1 h-screen">
+      <section className="flex flex-1 h-[100vh]">
         <Outlet />
       </section>
       <Footer />

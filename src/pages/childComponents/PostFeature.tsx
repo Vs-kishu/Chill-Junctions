@@ -15,7 +15,7 @@ type PostFeaturesProps = {
   notShowLike?: boolean;
 };
 
-const PostFeature = ({ post, userId, notShowLike }: PostFeaturesProps) => {
+const PostFeature = ({ post, userId }: PostFeaturesProps) => {
   const { mutate: LikePost, isPending: isliking } = useLikePost();
   const { data: userData, isPending: isUserDataLoading } = useGetCurrentUser();
   const { mutateAsync: savePost, isPending: isSaving } = useSavePost();
@@ -60,9 +60,8 @@ const PostFeature = ({ post, userId, notShowLike }: PostFeaturesProps) => {
             ) : (
               <FcLikePlaceholder onClick={() => handlePostLike(post.$id)} />
             )}
-            {notShowLike && (
-              <span className="text-sm font-bold">{post.likes.length}</span>
-            )}
+
+            <span className="text-sm font-bold">{post.likes.length}</span>
           </>
         )}
       </div>

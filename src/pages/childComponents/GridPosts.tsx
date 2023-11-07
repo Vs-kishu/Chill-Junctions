@@ -38,9 +38,7 @@ const GridPosts = ({
                 <p className="line-clamp-1 text-light-1">{post?.user?.name}</p>
               </div>
             )}
-            {showPostFeature && (
-              <PostFeature notShowLike={false} post={post} userId={user.id} />
-            )}
+            {showPostFeature && <PostFeature post={post} userId={user.id} />}
           </div>
         </li>
       ))}

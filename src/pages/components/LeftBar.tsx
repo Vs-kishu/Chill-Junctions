@@ -5,12 +5,17 @@ import { INavLink } from '@/types';
 import { useEffect } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
+import Loader from '../childComponents/Loader';
 
 const LeftBar = () => {
   const { pathname } = useLocation();
   const { user } = useUserContext();
   const navigate = useNavigate();
-  const { mutate: signOutAccount, isSuccess } = useSignOutAccount();
+  const {
+    mutate: signOutAccount,
+    isSuccess,
+    isPending: isSignOuting,
+  } = useSignOutAccount();
 
   useEffect(() => {
     if (isSuccess) {
@@ -19,8 +24,8 @@ const LeftBar = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isSuccess]);
   return (
-    <nav className="leftsidebar h-screen">
-      <div className="flex flex-col gap-10">
+    <nav className="leftsidebar h-[100vh]">
+      <div className="flex flex-col gap-2">
         <img
           className="w-24 h-24 mx-auto"
           src="/android-chrome-192x192.png"
@@ -28,7 +33,7 @@ const LeftBar = () => {
         />
         <Link
           to={`/profile/${user.id}`}
-          className="flex-center bg-sage-1 rounded-lg p-2 text-white gap-5 "
+          className="flex-center bg-sage-1 hover:bg-sage-2 rounded-lg p-2 text-white gap-5 "
         >
           <img
             src={user.imageUrl}
@@ -62,12 +67,16 @@ const LeftBar = () => {
           })}
         </ul>
       </div>
-      <div className="flex items-center gap-5 px-5">
-        <BiLogOutCircle
-          onClick={signOutAccount}
-          className="text-3xl cursor-pointer"
-        />
-        LogOut
+      <div className="flex items-center justify-center bg-sage-1 py-2 rounded-lg gap-3 px-5">
+        <span className="flex-shrink-0">LogOut</span>
+        {isSignOuting ? (
+          <Loader w={20} h={20} />
+        ) : (
+          <BiLogOutCircle
+            onClick={signOutAccount}
+            className="text-3xl flex-shrink-0 cursor-pointer hover:scale-110 rounded-full "
+          />
+        )}
       </div>
     </nav>
   );
