@@ -78,7 +78,6 @@ const UpdateProfile = () => {
     });
     return navigate(`/profile/${id}`);
   };
-  console.log(user);
   return (
     <div className="flex flex-1">
       <div className="common-container">

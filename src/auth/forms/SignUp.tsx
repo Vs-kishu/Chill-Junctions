@@ -142,7 +142,11 @@ const SignUp = () => {
             )}
           />
 
-          <Button type="submit" className="shad-button_primary">
+          <Button
+            type="submit"
+            disabled={isCreating || isSigningIn || isLoading}
+            className="shad-button_primary"
+          >
             {isCreating || isSigningIn || isLoading ? (
               <div className="flex-center gap-2">Loading...</div>
             ) : (

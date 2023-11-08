@@ -1,9 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { getCurrentUser } from '@/lib/appWrite/api';
 import { IUser } from '@/types';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const INITIAL_USER = {
   id: '',
   name: '',
@@ -91,4 +93,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUserContext = () => useContext(AuthContext);

@@ -76,7 +76,7 @@ const PostDetails = () => {
                   <p className="base-medium lg:body-bold text-light-1">
                     {post?.user.name}
                   </p>
-                  <div className="flex-center gap-2 text-light-2">
+                  <div className="flex-center flex-wrap  gap-2 text-light-2">
                     <p className="subtle-semibold lg:small-regular ">
                       {multiFormatDateString(post?.$createdAt)}
                     </p>
@@ -88,7 +88,7 @@ const PostDetails = () => {
                 </div>
               </Link>
 
-              <div className="flex-center gap-4">
+              <div className="flex-center flex-wrap gap-4">
                 <Link
                   to={`/update-post/${post?.$id}`}
                   className={`${user.id !== post?.user.$id && 'hidden'}`}

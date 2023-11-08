@@ -14,9 +14,9 @@ import {
   useParams,
 } from 'react-router-dom';
 import { Saved } from '..';
-import GridPosts from '../childComponents/GridPosts';
 import LikedPosts from '../childComponents/LikedPosts';
 import Loader from '../childComponents/Loader';
+import UserPosts from './UserPosts';
 
 const Profile = () => {
   const { id } = useParams();
@@ -117,12 +117,7 @@ const Profile = () => {
       )}
 
       <Routes>
-        <Route
-          index
-          element={
-            <GridPosts explorePosts={userProfile.post} showUser={false} />
-          }
-        />
+        <Route index element={<UserPosts />} />
         {userProfile.$id === user.id && (
           <Route path="/liked-posts" element={<LikedPosts />} />
         )}

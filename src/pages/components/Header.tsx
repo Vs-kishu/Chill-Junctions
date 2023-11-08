@@ -4,11 +4,12 @@ import { useSignOutAccount } from '@/lib/react-query/queriesAndMutations';
 import { useEffect } from 'react';
 import { BiLogOutCircle } from 'react-icons/bi';
 import { Link, useNavigate } from 'react-router-dom';
+import Loader from '../childComponents/Loader';
 
 const Header = () => {
   const { user } = useUserContext();
   const navigate = useNavigate();
-  const { mutate: signOutAccount, isSuccess } = useSignOutAccount();
+  const { mutate: signOutAccount, isSuccess, isPending } = useSignOutAccount();
 
   useEffect(() => {
     if (isSuccess) {
@@ -22,15 +23,21 @@ const Header = () => {
         <img className="w-14" src="/android-chrome-192x192.png" alt="logo" />
       </Link>
       <div className="flex gap-5 items-center">
-        <img
-          className="w-8 h-8 rounded-full"
-          src={user.imageUrl}
-          alt="profile"
-        />
-        <BiLogOutCircle
-          className="text-3xl cursor-pointer"
-          onClick={signOutAccount}
-        />
+        <Link className="flex-shrink-0" to={`/profile/${user.id}`}>
+          <img
+            className="w-8  h-8 rounded-full"
+            src={user.imageUrl}
+            alt="profile"
+          />
+        </Link>
+        {isPending ? (
+          <Loader w={20} h={20} />
+        ) : (
+          <BiLogOutCircle
+            className="text-3xl cursor-pointer"
+            onClick={signOutAccount}
+          />
+        )}
       </div>
     </section>
   );

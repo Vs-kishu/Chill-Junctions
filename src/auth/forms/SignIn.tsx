@@ -25,7 +25,7 @@ const SignIn = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isGuestLogin, setIsGuestLogin] = useState(false);
-  const { checkAuthUser } = useUserContext();
+  const { checkAuthUser, isLoading } = useUserContext();
 
   const { mutateAsync: signInUser, isPending: isSigningIn } =
     useSignInAccount();
@@ -79,7 +79,7 @@ const SignIn = () => {
 
   return (
     <Form {...form}>
-      <div className="sm:w-420 flex-center flex-col mx-auto">
+      <div className="sm:w-420 flex-center flex-col mx-auto py-8">
         <img
           className="w-40 h-24"
           src="/android-chrome-192x192.png"
@@ -126,10 +126,11 @@ const SignIn = () => {
           {isGuestLogin ? (
             <Button
               type="button"
+              disabled={isLoading || isSigningIn}
               onClick={handleGuestLogin}
               className="shad-button_primary"
             >
-              {isSigningIn ? (
+              {isSigningIn || isLoading ? (
                 <div className="flex-center gap-2">
                   <Loader w={20} h={20} />
                 </div>
@@ -138,8 +139,12 @@ const SignIn = () => {
               )}
             </Button>
           ) : (
-            <Button type="submit" className="shad-button_primary">
-              {isSigningIn ? (
+            <Button
+              type="submit"
+              disabled={isLoading || isSigningIn}
+              className="shad-button_primary"
+            >
+              {isSigningIn || isLoading ? (
                 <div className="flex-center gap-2">
                   <Loader w={20} h={20} />
                 </div>
