@@ -16,7 +16,6 @@ const GridPosts = ({
   const { user } = useUserContext();
 
   if (!explorePosts) return <Loader w={50} h={50} />;
-
   return (
     <ul className="grid-container">
       {explorePosts.map((post) => (
@@ -33,7 +32,7 @@ const GridPosts = ({
             {showUser && (
               <div className="flex items-center justify-start gap-2 flex-1">
                 <img
-                  src={post?.user?.imageUrl}
+                  src={post?.user?.imageUrl || user.imageUrl}
                   alt="creator"
                   className="w-8 h-8 rounded-full"
                 />
