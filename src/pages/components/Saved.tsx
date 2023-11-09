@@ -33,6 +33,7 @@ const Saved = () => {
   }, [currentUser]);
 
   if (isLoading || isCurrentUserLoading) return <Loader w={50} h={50} />;
+
   return (
     <div className="flex flex-col mx-auto gap-5">
       {currentUser?.liked.length === 0 && (

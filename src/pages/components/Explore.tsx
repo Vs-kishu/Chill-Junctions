@@ -11,6 +11,7 @@ import { useInView } from 'react-intersection-observer';
 import GridPosts from '../childComponents/GridPosts';
 import Loader from '../childComponents/Loader';
 import SearchedPosts from '../childComponents/SearchedPosts';
+import ServerErrorPage from './ServerErrorPage';
 
 const Explore = () => {
   const { ref, inView } = useInView();
@@ -30,11 +31,14 @@ const Explore = () => {
   if (!posts) {
     return <Loader w={50} h={50} />;
   }
+
   const shouldShowSearchedPosts = searchTerm !== '';
   const shouldShowPost =
     !shouldShowSearchedPosts &&
     posts.pages.every((item) => item?.documents.length === 0);
-
+  if (!posts?.pages[0]) {
+    return <ServerErrorPage />;
+  }
   return (
     <div className="explore-container">
       <div className="explore-inner_container">

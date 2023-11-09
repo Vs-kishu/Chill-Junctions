@@ -9,8 +9,6 @@ type searchedPostprops = {
 const SearchedPosts = ({ isSearching, searchedPosts }: searchedPostprops) => {
   if (isSearching || !searchedPosts) return <Loader w={50} h={50} />;
 
-  console.log(searchedPosts);
-
   if (searchedPosts && searchedPosts.length > 0) {
     return <GridPosts explorePosts={searchedPosts} />;
   }

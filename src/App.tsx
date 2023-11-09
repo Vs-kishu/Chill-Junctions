@@ -15,6 +15,7 @@ import {
   Saved,
   UpdateProfile,
 } from './pages';
+import ErrorPage from './pages/components/ErrorPage';
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/posts/:id" element={<PostDetails />} />
           <Route path="/profile/:id/*" element={<Profile />} />
           <Route path="/update-profile/:id" element={<UpdateProfile />} />
+          <Route path="*" element={<ErrorPage />} />
         </Route>
       </Routes>
       <Toaster />

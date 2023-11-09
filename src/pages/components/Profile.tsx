@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetUserById } from '@/lib/react-query/queriesAndMutations';
 import { BsImages } from 'react-icons/bs';
@@ -54,7 +53,7 @@ const Profile = () => {
             </div> */}
 
             <p className="small-medium md:base-medium text-center xl:text-left mt-7 max-w-screen-sm">
-              {userProfile.bio} kishan
+              {userProfile.bio}
             </p>
           </div>
 
@@ -73,11 +72,11 @@ const Profile = () => {
                 </p>
               </Link>
             </div>
-            <div className={`${user.id === id && 'hidden'}`}>
+            {/* <div className={`${user.id === id && 'hidden'}`}>
               <Button type="button" className="shad-button_primary px-8">
                 Follow
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
