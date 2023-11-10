@@ -56,7 +56,7 @@ const Home = () => {
       </div>
 
       <div className="home-creators">
-        <h3 className="h3-bold text-light-1">Top Creators</h3>
+        <h3 className="h3-bold text-sage-1">Top Creators</h3>
         {isUserLoading && !creators ? (
           <Loader w={50} h={50} />
         ) : (

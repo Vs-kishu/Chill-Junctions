@@ -479,3 +479,20 @@ export async function fetchUsers(limit?: number) {
     console.log(error);
   }
 }
+
+export async function fetchUserPosts(userId: string) {
+  try {
+    const posts = databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.postCollectionId,
+      [Query.equal('user', userId)]
+    );
+
+    if (!posts) {
+      throw Error;
+    }
+    return posts;
+  } catch (error) {
+    console.log(error);
+  }
+}

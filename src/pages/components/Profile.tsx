@@ -90,7 +90,7 @@ const Profile = () => {
             }`}
           >
             <BsImages />
-            Posts
+            <span className="max-xs:hidden">Posts</span>
           </Link>
           <Link
             to={`/profile/${id}/liked-posts`}
@@ -100,7 +100,7 @@ const Profile = () => {
             }`}
           >
             <FcLike />
-            Liked Posts
+            <span className="max-xs:hidden">Liked Posts</span>
           </Link>
           <Link
             to={`/profile/${id}/saved-posts`}
@@ -110,7 +110,7 @@ const Profile = () => {
             }`}
           >
             <FaBookmark />
-            Saved Posts
+            <span className="max-xs:hidden">Saved Posts</span>
           </Link>
         </div>
       )}

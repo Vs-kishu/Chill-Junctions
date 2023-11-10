@@ -10,6 +10,7 @@ import {
   createPost,
   deletePost,
   editPost,
+  fetchUserPosts,
   fetchUsers,
   getCurrentUser,
   getInfinitePost,
@@ -221,5 +222,13 @@ export const useFetchUsers = (limit?: number) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USERS],
     queryFn: () => fetchUsers(limit),
+  });
+};
+
+export const useGetUserPosts = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_USER_POSTS, userId],
+    queryFn: () => fetchUserPosts(userId),
+    enabled: !!userId,
   });
 };

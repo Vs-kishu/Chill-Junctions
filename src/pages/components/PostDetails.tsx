@@ -13,6 +13,7 @@ import { MdDelete } from 'react-icons/md';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import Loader from '../childComponents/Loader';
 import PostFeature from '../childComponents/PostFeature';
+import RealatedPosts from '../childComponents/RealatedPosts';
 
 const PostDetails = () => {
   const navigate = useNavigate();
@@ -37,7 +38,6 @@ const PostDetails = () => {
     });
     navigate(-1);
   };
-
   return (
     <div className="post_details-container">
       <div className="hidden md:flex max-w-5xl w-full">
@@ -132,6 +132,9 @@ const PostDetails = () => {
           </div>
         </div>
       )}
+      <div>
+        <RealatedPosts userId={post.user.$id} post={post} />
+      </div>
     </div>
   );
 };

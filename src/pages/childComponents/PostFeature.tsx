@@ -70,10 +70,16 @@ const PostFeature = ({ post, userId }: PostFeaturesProps) => {
           <Loader w={10} h={10} />
         ) : (
           <>
-            {hasSaved ? (
-              <FcBookmark onClick={handleSaveAndUnsavedPost} />
-            ) : (
-              <FiBookmark onClick={() => handleSaveAndUnsavedPost(post.$id)} />
+            {post.user.$id !== userData?.$id && (
+              <>
+                {hasSaved ? (
+                  <FcBookmark onClick={handleSaveAndUnsavedPost} />
+                ) : (
+                  <FiBookmark
+                    onClick={() => handleSaveAndUnsavedPost(post.$id)}
+                  />
+                )}
+              </>
             )}
           </>
         )}
