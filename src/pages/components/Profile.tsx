@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/AuthContext';
 import { useGetUserById } from '@/lib/react-query/queriesAndMutations';
 import { BsImages } from 'react-icons/bs';
@@ -72,26 +73,26 @@ const Profile = () => {
                 </p>
               </Link>
             </div>
-            {/* <div className={`${user.id === id && 'hidden'}`}>
+            <div className={`${user.id === id && 'hidden'}`}>
               <Button type="button" className="shad-button_primary px-8">
                 Follow
               </Button>
-            </div> */}
+            </div>
           </div>
         </div>
       </div>
 
-      {userProfile.$id === user.id && (
-        <div className="flex max-w-5xl w-full">
-          <Link
-            to={`/profile/${id}`}
-            className={`profile-tab rounded-l-lg ${
-              pathname === `/profile/${id}` && '!bg-sage-4 text-light-1'
-            }`}
-          >
-            <BsImages />
-            <span className="max-xs:hidden">Posts</span>
-          </Link>
+      <div className="flex max-w-5xl w-full">
+        <Link
+          to={`/profile/${id}`}
+          className={`profile-tab rounded-l-lg ${
+            pathname === `/profile/${id}` && '!bg-sage-4 text-light-1'
+          }`}
+        >
+          <BsImages />
+          <span className="max-xs:hidden">Posts</span>
+        </Link>
+        {userProfile.$id === user.id && (
           <Link
             to={`/profile/${id}/liked-posts`}
             className={`profile-tab  ${
@@ -102,6 +103,8 @@ const Profile = () => {
             <FcLike />
             <span className="max-xs:hidden">Liked Posts</span>
           </Link>
+        )}
+        {userProfile.$id === user.id && (
           <Link
             to={`/profile/${id}/saved-posts`}
             className={`profile-tab rounded-r-lg ${
@@ -112,11 +115,11 @@ const Profile = () => {
             <FaBookmark />
             <span className="max-xs:hidden">Saved Posts</span>
           </Link>
-        </div>
-      )}
+        )}
+      </div>
 
       <Routes>
-        <Route index element={<UserPosts />} />
+        <Route index element={<UserPosts userPosts={userProfile.post} />} />
         {userProfile.$id === user.id && (
           <Route path="/liked-posts" element={<LikedPosts />} />
         )}

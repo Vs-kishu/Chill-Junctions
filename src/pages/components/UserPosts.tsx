@@ -1,11 +1,11 @@
-import { useGetCurrentUser } from '@/lib/react-query/queriesAndMutations';
+import { Models } from 'appwrite';
 import GridPosts from '../childComponents/GridPosts';
 import Loader from '../childComponents/Loader';
-
-const UserPosts = () => {
-  const { data: currentUser } = useGetCurrentUser();
-
-  if (!currentUser)
+type userPostProps = {
+  userPosts: Models.Document[];
+};
+const UserPosts = ({ userPosts }: userPostProps) => {
+  if (!userPosts)
     return (
       <div className="flex-center w-full h-full">
         <Loader w={50} h={50} />
@@ -14,11 +14,9 @@ const UserPosts = () => {
 
   return (
     <>
-      {currentUser.post.length === 0 && (
-        <p className="text-light-4">No Post Yet</p>
-      )}
+      {userPosts.length === 0 && <p className="text-light-4">No Post Yet</p>}
 
-      <GridPosts explorePosts={currentUser.post} showPostFeature={false} />
+      <GridPosts explorePosts={userPosts} showPostFeature={false} />
     </>
   );
 };
