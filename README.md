@@ -29,5 +29,6 @@ Install my-project with npm
   npm run dev
 ```
 # App demo Video
-https://drive.google.com/file/d/1ihaeoA655fB0Jp9hf9S_QG_Cr12t2jAo/view?usp=sharing
+
+https://github.com/Vs-kishu/Chill-Junctions/assets/91000916/b952a338-f5f0-4fb2-929f-c9960313f5ed
 
